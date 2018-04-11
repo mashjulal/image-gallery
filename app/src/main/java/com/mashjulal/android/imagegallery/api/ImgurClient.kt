@@ -1,7 +1,6 @@
 package com.mashjulal.android.imagegallery.api
 
-import android.content.res.Resources
-import com.mashjulal.android.imagegallery.R
+import com.mashjulal.android.imagegallery.ImageGalleryApplication
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,8 +10,7 @@ import java.util.concurrent.TimeUnit
 object ImgurClient {
 
     private const val API_URL = "https://api.imgur.com/3/"
-    private val CLIENT_ID =
-            Resources.getSystem().getString(R.string.imgur_secret)
+    private val CLIENT_ID = ImageGalleryApplication.instance.getSecretClientId()
     private const val TIMEOUT: Long = 20
 
 

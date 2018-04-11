@@ -6,5 +6,5 @@ data class ImgurGallery(
         @SerializedName("id")val id: String,
         @SerializedName("title") val title: String?,
         @SerializedName("score") val score: Int,
-        @SerializedName("images") val images: List<ImgurImage>
+        @SerializedName("images") val images: List<ImgurImage>?
         )

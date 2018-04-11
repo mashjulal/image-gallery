@@ -1,0 +1,51 @@
+package com.mashjulal.android.imagegallery.adapters
+
+import android.content.Context
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.mashjulal.android.imagegallery.R
+import com.mashjulal.android.imagegallery.classes.ImgurGallery
+import kotlinx.android.synthetic.main.item_gallery.view.*
+
+class ImgurGalleryRecyclerViewAdapter(
+        private val context: Context,
+        private val galleries : List<ImgurGallery> = ArrayList()
+) : RecyclerView.Adapter<ImgurGalleryRecyclerViewAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(context).inflate(R.layout.item_gallery, parent, false)
+
+        return ViewHolder(v)
+    }
+
+    override fun getItemCount() = galleries.size
+
+    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+        val gallery = galleries[position]
+
+        holder!!.tvTitle.text = gallery.title
+        if (gallery.images != null) {
+            if (gallery.images.size > 1) {
+                holder.rvImages.layoutManager = GridLayoutManager(context, 2)
+                holder.rvImages.adapter = ImgurImageRecyclerViewAdapter(context, gallery.images)
+            } else {
+                holder.rvImages.layoutManager = LinearLayoutManager(context)
+                holder.rvImages.adapter = ImgurImageRecyclerViewAdapter(context, gallery.images, true)
+            }
+            holder.rvImages.visibility = View.VISIBLE
+        } else {
+            holder.rvImages.visibility = View.GONE
+            Log.d("gal", gallery.toString())
+        }
+    }
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvTitle = itemView.text_galleryTitle!!
+        val rvImages = itemView.rv_images!!
+    }
+}
