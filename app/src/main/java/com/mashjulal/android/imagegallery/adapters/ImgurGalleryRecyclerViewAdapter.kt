@@ -14,7 +14,8 @@ import kotlinx.android.synthetic.main.item_gallery.view.*
 
 class ImgurGalleryRecyclerViewAdapter(
         private val context: Context,
-        private val galleries : List<ImgurGallery> = ArrayList()
+        private val galleries : List<ImgurGallery> = ArrayList(),
+        private val onImageClickListener: ImgurImageRecyclerViewAdapter.OnImageClickListener
 ) : RecyclerView.Adapter<ImgurGalleryRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -32,10 +33,14 @@ class ImgurGalleryRecyclerViewAdapter(
         if (gallery.images != null) {
             if (gallery.images.size > 1) {
                 holder.rvImages.layoutManager = GridLayoutManager(context, 2)
-                holder.rvImages.adapter = ImgurImageRecyclerViewAdapter(context, gallery.images)
+                val adapter = ImgurImageRecyclerViewAdapter(context, gallery.images)
+                adapter.setOnImageClickListener(onImageClickListener)
+                holder.rvImages.adapter = adapter
             } else {
                 holder.rvImages.layoutManager = LinearLayoutManager(context)
-                holder.rvImages.adapter = ImgurImageRecyclerViewAdapter(context, gallery.images, true)
+                val adapter = ImgurImageRecyclerViewAdapter(context, gallery.images, true)
+                adapter.setOnImageClickListener(onImageClickListener)
+                holder.rvImages.adapter = adapter
             }
             holder.rvImages.visibility = View.VISIBLE
         } else {
