@@ -15,13 +15,14 @@ import com.mashjulal.android.imagegallery.R
 import com.mashjulal.android.imagegallery.api.ImageThumbnail
 import com.mashjulal.android.imagegallery.api.ImageType
 import com.mashjulal.android.imagegallery.api.getImageThumbnailLink
-import com.mashjulal.android.imagegallery.classes.ImgurGallery
+import com.mashjulal.android.imagegallery.classes.ImgurImage
 import com.mashjulal.android.imagegallery.getScreenWidthInPixels
 import kotlinx.android.synthetic.main.item_image.view.*
 
 class ImgurImageRecyclerViewAdapter(
         private val context: Context,
-        private val gallery: ImgurGallery,
+        private val galleryTitle: String,
+        private val images: List<ImgurImage>,
         private val oneImage: Boolean = false
 ) : RecyclerView.Adapter<ImgurImageRecyclerViewAdapter.ViewHolder>() {
 
@@ -32,10 +33,10 @@ class ImgurImageRecyclerViewAdapter(
         return ViewHolder(v)
     }
 
-    override fun getItemCount(): Int = gallery.images?.size ?: 0
+    override fun getItemCount(): Int = images.size
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val image = gallery.images!![position]
+        val image = images[position]
 
         val width = getScreenWidthInPixels()
         val imageWidth = if(oneImage) width else width / 2
@@ -45,22 +46,25 @@ class ImgurImageRecyclerViewAdapter(
                 .load(imageLink)
                 .listener(object: RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?, model: Any?,
-                                              target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                              target: Target<Drawable>?,
+                                              isFirstResource: Boolean): Boolean {
                         holder!!.loading.visibility = View.GONE
                         return false
                     }
 
                     override fun onResourceReady(resource: Drawable?, model: Any?,
-                                                 target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                                 target: Target<Drawable>?, dataSource: DataSource?,
+                                                 isFirstResource: Boolean): Boolean {
                         holder!!.loading.visibility = View.GONE
                         return false
                     }
                 })
                 .error(android.R.drawable.stat_notify_error)
+                .centerCrop()
                 .override(imageWidth, imageWidth)
                 .into(holder!!.image)
 
-        holder.image.setOnClickListener { onImageClick!!.onClick(gallery, position) }
+        holder.image.setOnClickListener { onImageClick!!.onClick(galleryTitle, images, position) }
 
         holder.gif.visibility = if (image.type == ImageType.GIF.value) View.VISIBLE else View.GONE
     }
@@ -76,6 +80,6 @@ class ImgurImageRecyclerViewAdapter(
     }
 
     interface OnImageClickListener {
-        fun onClick(gallery: ImgurGallery, position: Int)
+        fun onClick(galleryTitle: String, images: List<ImgurImage>, position: Int)
     }
 }

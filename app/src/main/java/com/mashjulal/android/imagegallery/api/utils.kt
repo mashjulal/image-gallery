@@ -15,8 +15,22 @@ enum class ImageType(val value: String) {
 }
 
 fun getImageThumbnailLink(imageLink: String, thumbnail: ImageThumbnail): String {
-    val lastDotIndex = imageLink.lastIndexOf(".")
-    val path = imageLink.subSequence(0, lastDotIndex) as String
-    val ext = imageLink.subSequence(lastDotIndex + 1, imageLink.length)
-    return path + thumbnail.s + "." + ext
+    val pathWithoutExt = imageLink.substringBeforeLast(".")
+    val ext = imageLink.substringAfterLast(".")
+    return "%s%s.%s".format(pathWithoutExt, thumbnail.s, ext)
+}
+
+fun hasThumbnailSuffix(imageId: String, imageLink: String): Boolean {
+    val imageIdFromUrl = imageLink.substringAfterLast("/").substringBeforeLast(".")
+    return imageId != imageIdFromUrl
+}
+
+fun removeThumbnailSuffix(imageLink: String): String {
+    val fileName = imageLink.substringAfterLast("/")
+    val imageIdWithSuffix = fileName.substringBeforeLast(".")
+    val imageId = imageIdWithSuffix.substring(0, imageIdWithSuffix.length-1)
+
+    val path = imageLink.substringBeforeLast("/")
+    val ext = fileName.substringAfterLast(".")
+    return "%s/%s.%s".format(path, imageId, ext)
 }

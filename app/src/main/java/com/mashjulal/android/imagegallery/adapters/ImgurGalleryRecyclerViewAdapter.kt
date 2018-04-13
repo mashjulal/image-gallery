@@ -4,12 +4,12 @@ import android.content.Context
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mashjulal.android.imagegallery.R
 import com.mashjulal.android.imagegallery.classes.ImgurGallery
+import com.mashjulal.android.imagegallery.classes.ImgurImage
 import kotlinx.android.synthetic.main.item_gallery.view.*
 
 class ImgurGalleryRecyclerViewAdapter(
@@ -34,23 +34,24 @@ class ImgurGalleryRecyclerViewAdapter(
         val gallery = galleries[position]
 
         holder!!.tvTitle.text = gallery.title
-        if (gallery.images != null) {
-            if (gallery.images.size > 1) {
-                holder.rvImages.layoutManager = GridLayoutManager(context, IMAGES_SPAN_COUNT)
-                val adapter = ImgurImageRecyclerViewAdapter(context, gallery)
-                adapter.setOnImageClickListener(onImageClickListener)
-                holder.rvImages.adapter = adapter
-            } else {
-                holder.rvImages.layoutManager = LinearLayoutManager(context)
-                val adapter = ImgurImageRecyclerViewAdapter(context, gallery, true)
-                adapter.setOnImageClickListener(onImageClickListener)
-                holder.rvImages.adapter = adapter
-            }
-            holder.rvImages.visibility = View.VISIBLE
+        val layoutManager: LinearLayoutManager
+        var images: List<ImgurImage> = gallery.images
+        var oneImage = false
+        if (gallery.images.size > 1) {
+            layoutManager = GridLayoutManager(context, IMAGES_SPAN_COUNT)
         } else {
-            holder.rvImages.visibility = View.GONE
-            Log.d("gal", gallery.toString())
+            if (gallery.images.isEmpty()) {
+                val image = ImgurImage(gallery.id, gallery.title, gallery.type,
+                        gallery.link, gallery.animated, gallery.width, gallery.height)
+                images = listOf(image)
+            }
+            layoutManager = LinearLayoutManager(context)
+            oneImage = true
         }
+        val adapter = ImgurImageRecyclerViewAdapter(context, gallery.title, images, oneImage)
+        adapter.setOnImageClickListener(onImageClickListener)
+        holder.rvImages.layoutManager = layoutManager
+        holder.rvImages.adapter = adapter
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

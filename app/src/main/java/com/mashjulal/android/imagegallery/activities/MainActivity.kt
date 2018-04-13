@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity() {
         val galleries = HotAsyncTask().execute().get()
         rv_galleries.adapter = ImgurGalleryRecyclerViewAdapter(applicationContext, galleries,
                 object: ImgurImageRecyclerViewAdapter.OnImageClickListener {
-            override fun onClick(gallery: ImgurGallery, position: Int) {
-                openImage(gallery.title, gallery.images!![position])
+            override fun onClick(galleryTitle: String, images: List<ImgurImage>, position: Int) {
+                openImage(galleryTitle, images[position])
             }
 
         })
@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private fun openImage(galleryTitle: String, image: ImgurImage) {
         val i = Intent(this, ImageActivity::class.java)
         i.putExtra(ImageActivity.ARG_GALLERY_TITLE, galleryTitle)
+
         i.putExtra(ImageActivity.ARG_IMAGE_LINK, image.link)
         startActivity(i)
     }
