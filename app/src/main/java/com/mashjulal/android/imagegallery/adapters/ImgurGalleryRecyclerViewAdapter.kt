@@ -18,6 +18,10 @@ class ImgurGalleryRecyclerViewAdapter(
         private val onImageClickListener: ImgurImageRecyclerViewAdapter.OnImageClickListener
 ) : RecyclerView.Adapter<ImgurGalleryRecyclerViewAdapter.ViewHolder>() {
 
+    companion object {
+        private const val IMAGES_SPAN_COUNT = 2
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(context).inflate(R.layout.item_gallery, parent, false)
 
@@ -32,13 +36,13 @@ class ImgurGalleryRecyclerViewAdapter(
         holder!!.tvTitle.text = gallery.title
         if (gallery.images != null) {
             if (gallery.images.size > 1) {
-                holder.rvImages.layoutManager = GridLayoutManager(context, 2)
-                val adapter = ImgurImageRecyclerViewAdapter(context, gallery.images)
+                holder.rvImages.layoutManager = GridLayoutManager(context, IMAGES_SPAN_COUNT)
+                val adapter = ImgurImageRecyclerViewAdapter(context, gallery)
                 adapter.setOnImageClickListener(onImageClickListener)
                 holder.rvImages.adapter = adapter
             } else {
                 holder.rvImages.layoutManager = LinearLayoutManager(context)
-                val adapter = ImgurImageRecyclerViewAdapter(context, gallery.images, true)
+                val adapter = ImgurImageRecyclerViewAdapter(context, gallery, true)
                 adapter.setOnImageClickListener(onImageClickListener)
                 holder.rvImages.adapter = adapter
             }

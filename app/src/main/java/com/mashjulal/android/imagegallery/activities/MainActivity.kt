@@ -22,17 +22,17 @@ class MainActivity : AppCompatActivity() {
         val galleries = HotAsyncTask().execute().get()
         rv_galleries.adapter = ImgurGalleryRecyclerViewAdapter(applicationContext, galleries,
                 object: ImgurImageRecyclerViewAdapter.OnImageClickListener {
-            override fun onClick(image: ImgurImage) {
-                openImage(image)
+            override fun onClick(gallery: ImgurGallery, position: Int) {
+                openImage(gallery.title, gallery.images!![position])
             }
 
         })
         rv_galleries.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun openImage(image: ImgurImage) {
+    private fun openImage(galleryTitle: String, image: ImgurImage) {
         val i = Intent(this, ImageActivity::class.java)
-        i.putExtra(ImageActivity.ARG_IMAGE_TITLE, image.title ?: "Not named")
+        i.putExtra(ImageActivity.ARG_GALLERY_TITLE, galleryTitle)
         i.putExtra(ImageActivity.ARG_IMAGE_LINK, image.link)
         startActivity(i)
     }
