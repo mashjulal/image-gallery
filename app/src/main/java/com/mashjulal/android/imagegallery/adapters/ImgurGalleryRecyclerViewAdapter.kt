@@ -31,11 +31,8 @@ class ImgurGalleryRecyclerViewAdapter(
     override fun getItemCount() = galleries.size
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val gallery = galleries[position]
-
-        holder!!.tvTitle.text = gallery.title
+        var gallery = galleries[position]
         val layoutManager: LinearLayoutManager
-        var images: List<ImgurImage> = gallery.images
         var oneImage = false
         if (gallery.images.size > 1) {
             layoutManager = GridLayoutManager(context, IMAGES_SPAN_COUNT)
@@ -43,15 +40,17 @@ class ImgurGalleryRecyclerViewAdapter(
             if (gallery.images.isEmpty()) {
                 val image = ImgurImage(gallery.id, gallery.title, gallery.type,
                         gallery.link, gallery.animated, gallery.width, gallery.height)
-                images = listOf(image)
+                val images = listOf(image)
+                gallery = ImgurGallery(gallery.id, gallery.title, gallery.score, images)
             }
             layoutManager = LinearLayoutManager(context)
             oneImage = true
         }
-        val adapter = ImgurImageRecyclerViewAdapter(context, gallery.title, images, oneImage)
+        val adapter = ImgurImageRecyclerViewAdapter(context, gallery, oneImage)
         adapter.setOnImageClickListener(onImageClickListener)
-        holder.rvImages.layoutManager = layoutManager
+        holder!!.rvImages.layoutManager = layoutManager
         holder.rvImages.adapter = adapter
+        holder.tvTitle.text = gallery.title
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

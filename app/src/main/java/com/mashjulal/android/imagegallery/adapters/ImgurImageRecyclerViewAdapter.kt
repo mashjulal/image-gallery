@@ -15,14 +15,13 @@ import com.mashjulal.android.imagegallery.R
 import com.mashjulal.android.imagegallery.api.ImageThumbnail
 import com.mashjulal.android.imagegallery.api.ImageType
 import com.mashjulal.android.imagegallery.api.getImageThumbnailLink
-import com.mashjulal.android.imagegallery.classes.ImgurImage
+import com.mashjulal.android.imagegallery.classes.ImgurGallery
 import com.mashjulal.android.imagegallery.getScreenWidthInPixels
 import kotlinx.android.synthetic.main.item_image.view.*
 
 class ImgurImageRecyclerViewAdapter(
         private val context: Context,
-        private val galleryTitle: String,
-        private val images: List<ImgurImage>,
+        private val gallery: ImgurGallery,
         private val oneImage: Boolean = false
 ) : RecyclerView.Adapter<ImgurImageRecyclerViewAdapter.ViewHolder>() {
 
@@ -33,10 +32,10 @@ class ImgurImageRecyclerViewAdapter(
         return ViewHolder(v)
     }
 
-    override fun getItemCount(): Int = images.size
+    override fun getItemCount(): Int = gallery.images.size
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val image = images[position]
+        val image = gallery.images[position]
 
         val width = getScreenWidthInPixels()
         val imageWidth = if(oneImage) width else width / 2
@@ -64,7 +63,7 @@ class ImgurImageRecyclerViewAdapter(
                 .override(imageWidth, imageWidth)
                 .into(holder!!.image)
 
-        holder.image.setOnClickListener { onImageClick!!.onClick(galleryTitle, images, position) }
+        holder.image.setOnClickListener { onImageClick!!.onClick(gallery, position) }
 
         holder.gif.visibility = if (image.type == ImageType.GIF.value) View.VISIBLE else View.GONE
     }
@@ -80,6 +79,6 @@ class ImgurImageRecyclerViewAdapter(
     }
 
     interface OnImageClickListener {
-        fun onClick(galleryTitle: String, images: List<ImgurImage>, position: Int)
+        fun onClick(gallery: ImgurGallery, selectedImagePosition: Int)
     }
 }

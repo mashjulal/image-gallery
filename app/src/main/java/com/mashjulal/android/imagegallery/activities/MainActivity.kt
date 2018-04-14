@@ -10,7 +10,6 @@ import com.mashjulal.android.imagegallery.adapters.ImgurGalleryRecyclerViewAdapt
 import com.mashjulal.android.imagegallery.adapters.ImgurImageRecyclerViewAdapter
 import com.mashjulal.android.imagegallery.api.ImgurClient
 import com.mashjulal.android.imagegallery.classes.ImgurGallery
-import com.mashjulal.android.imagegallery.classes.ImgurImage
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,19 +21,17 @@ class MainActivity : AppCompatActivity() {
         val galleries = HotAsyncTask().execute().get()
         rv_galleries.adapter = ImgurGalleryRecyclerViewAdapter(applicationContext, galleries,
                 object: ImgurImageRecyclerViewAdapter.OnImageClickListener {
-            override fun onClick(galleryTitle: String, images: List<ImgurImage>, position: Int) {
-                openImage(galleryTitle, images[position])
+            override fun onClick(gallery: ImgurGallery, selectedImagePosition: Int) {
+                openImage(gallery, selectedImagePosition)
             }
-
         })
         rv_galleries.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun openImage(galleryTitle: String, image: ImgurImage) {
+    private fun openImage(gallery: ImgurGallery, selectedImagePosition: Int) {
         val i = Intent(this, ImageActivity::class.java)
-        i.putExtra(ImageActivity.ARG_GALLERY_TITLE, galleryTitle)
-
-        i.putExtra(ImageActivity.ARG_IMAGE_LINK, image.link)
+        i.putExtra(ImageActivity.ARG_GALLERY, gallery)
+        i.putExtra(ImageActivity.ARG_IMAGE_POSITION, selectedImagePosition)
         startActivity(i)
     }
 
