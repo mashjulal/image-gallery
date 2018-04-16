@@ -7,34 +7,108 @@
     android:layout_height="wrap_content"
     android:layout_margin="2dp">
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/text_galleryTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:background="@android:color/holo_blue_dark"
-        android:textColor="@android:color/background_light"
-        android:shadowDy="10"
-        android:shadowColor="@color/black"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/black"
+            android:padding="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:id="@+id/text_galleryTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:padding="5dp"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_accountUrl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"/>
+
+                <TextView
+                    android:id="@+id/tv_datetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_images"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_galleryTitle"
             tools:listitem="@layout/item_image"
             app:layoutManager="android.support.v7.widget.GridLayoutManager"
-            android:foregroundGravity="center"/>
-    </android.support.constraint.ConstraintLayout>
+            android:foregroundGravity="center"
+            android:layout_below="@id/header"
+            android:layout_alignParentStart="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/rv_images"
+            android:background="@color/black"
+            android:padding="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_views"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:drawableStart="@drawable/ic_viewed"
+                android:gravity="center"
+                android:layout_marginEnd="20dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:drawableStart="@drawable/ic_thumbs"
+                android:gravity="center"
+                android:layout_marginEnd="20dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_commentCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:drawableStart="@drawable/ic_comments"
+                android:layout_marginEnd="20dp"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>

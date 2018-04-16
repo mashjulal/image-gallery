@@ -7,7 +7,11 @@ import com.google.gson.annotations.SerializedName
 data class ImgurGallery(
         @SerializedName("id")val id: String,
         @SerializedName("title") val title: String,
-        @SerializedName("score") val score: Int,
+        @SerializedName("points") val points: Int,
+        @SerializedName("views") val views: Int,
+        @SerializedName("comment_count") val commentCount: Int,
+        @SerializedName("account_url") val accountUrl: String,
+        @SerializedName("datetime") val datetime: Long,
         @SerializedName("images") private val _images: List<ImgurImage>?,
         @SerializedName("type") private val _type: String?,
         @SerializedName("width") private val _width: Int?,
@@ -28,24 +32,34 @@ data class ImgurGallery(
     val images: List<ImgurImage>
         get() = _images ?: ArrayList()
 
-    constructor(id: String, title: String, score: Int, images: List<ImgurImage>?)
-            : this(id, title, score, images, null, null, null, null, null)
-
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
             parcel.readInt(),
+            parcel.readInt(),
+            parcel.readInt(),
+            parcel.readString(),
+            parcel.readLong(),
             parcel.createTypedArrayList(ImgurImage),
             parcel.readString(),
             parcel.readValue(Int::class.java.classLoader) as? Int,
             parcel.readValue(Int::class.java.classLoader) as? Int,
             parcel.readString(),
-            parcel.readValue(Boolean::class.java.classLoader) as? Boolean)
+            parcel.readValue(Boolean::class.java.classLoader) as? Boolean) {
+    }
+
+    constructor(id: String, title: String, points: Int, views: Int,
+                commentCount: Int, accountUrl: String, datetime: Long, images: List<ImgurImage>?)
+            : this(id, title, points, views, commentCount, accountUrl, datetime, images, null, null, null, null, null)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
         parcel.writeString(title)
-        parcel.writeInt(score)
+        parcel.writeInt(points)
+        parcel.writeInt(views)
+        parcel.writeInt(commentCount)
+        parcel.writeString(accountUrl)
+        parcel.writeLong(datetime)
         parcel.writeTypedList(_images)
         parcel.writeString(_type)
         parcel.writeValue(_width)
@@ -67,4 +81,5 @@ data class ImgurGallery(
             return arrayOfNulls(size)
         }
     }
+
 }

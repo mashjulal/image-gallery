@@ -10,7 +10,10 @@ import android.view.ViewGroup
 import com.mashjulal.android.imagegallery.R
 import com.mashjulal.android.imagegallery.classes.ImgurGallery
 import com.mashjulal.android.imagegallery.classes.ImgurImage
+import com.mashjulal.android.imagegallery.getNumberStringRepresentation
 import kotlinx.android.synthetic.main.item_gallery.view.*
+import java.text.DateFormat
+import java.util.*
 
 class ImgurGalleryRecyclerViewAdapter(
         private val context: Context,
@@ -41,7 +44,9 @@ class ImgurGalleryRecyclerViewAdapter(
                 val image = ImgurImage(gallery.id, gallery.title, gallery.type,
                         gallery.link, gallery.animated, gallery.width, gallery.height)
                 val images = listOf(image)
-                gallery = ImgurGallery(gallery.id, gallery.title, gallery.score, images)
+                gallery = ImgurGallery(gallery.id, gallery.title, gallery.points,
+                        gallery.views, gallery.commentCount, gallery.accountUrl,
+                        gallery.datetime, images)
             }
             layoutManager = LinearLayoutManager(context)
             oneImage = true
@@ -51,10 +56,23 @@ class ImgurGalleryRecyclerViewAdapter(
         holder!!.rvImages.layoutManager = layoutManager
         holder.rvImages.adapter = adapter
         holder.tvTitle.text = gallery.title
+        holder.tvViews.text = getNumberStringRepresentation(gallery.views)
+        holder.tvPoints.text = getNumberStringRepresentation(gallery.points)
+        holder.tvCommentCount.text = getNumberStringRepresentation(gallery.commentCount)
+        holder.tvCommentCount.text = getNumberStringRepresentation(gallery.commentCount)
+        holder.tvCommentCount.text = getNumberStringRepresentation(gallery.commentCount)
+        holder.tvAccountUrl.text = gallery.accountUrl
+        holder.tvDatetime.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+                .format(gallery.datetime * 1000)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTitle = itemView.text_galleryTitle!!
+        val tvViews = itemView.tv_views!!
+        val tvPoints = itemView.tv_points!!
+        val tvCommentCount = itemView.tv_commentCount!!
+        val tvAccountUrl = itemView.tv_accountUrl!!
+        val tvDatetime = itemView.tv_datetime!!
         val rvImages = itemView.rv_images!!
     }
 }
