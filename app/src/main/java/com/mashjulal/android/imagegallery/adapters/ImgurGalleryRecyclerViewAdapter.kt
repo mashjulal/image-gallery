@@ -1,6 +1,7 @@
 package com.mashjulal.android.imagegallery.adapters
 
 import android.content.Context
+import android.os.Handler
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,7 +18,7 @@ import java.util.*
 
 class ImgurGalleryRecyclerViewAdapter(
         private val context: Context,
-        private val galleries : List<ImgurGallery> = ArrayList(),
+        private var galleries : List<ImgurGallery> = ArrayList(),
         private val onImageClickListener: ImgurImageRecyclerViewAdapter.OnImageClickListener
 ) : RecyclerView.Adapter<ImgurGalleryRecyclerViewAdapter.ViewHolder>() {
 
@@ -64,6 +65,12 @@ class ImgurGalleryRecyclerViewAdapter(
         holder.tvAccountUrl.text = gallery.accountUrl
         holder.tvDatetime.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
                 .format(gallery.datetime * 1000)
+    }
+
+    fun insert(galleries: List<ImgurGallery>) {
+        val galSizeBeforeInsertion = this.galleries.size
+        this.galleries += galleries
+        Handler().post({ notifyItemRangeInserted(galSizeBeforeInsertion, this.galleries.size) })
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

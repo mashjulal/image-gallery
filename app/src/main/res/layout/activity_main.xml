@@ -6,10 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_toTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:onClick="scrollToTop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_up"
+        android:focusable="true" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_galleries"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_gallery"
+        />
 </android.support.constraint.ConstraintLayout>
