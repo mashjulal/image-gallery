@@ -32,8 +32,9 @@ class ThumbnailTest {
     @Test
     fun testHasThumbnail_True() {
         val url = "http://i.imgur.com/JmHLXXvh.gif"
+        val id = "JmHLXXv"
 
-        val hasSuffix = hasThumbnailSuffix(url)
+        val hasSuffix = hasThumbnailSuffix(url, id)
 
         assertTrue(hasSuffix)
     }
@@ -41,8 +42,9 @@ class ThumbnailTest {
     @Test
     fun testHasThumbnail_False() {
         val url = "http://i.imgur.com/JmHLXXv.gif"
+        val id = "JmHLXXv"
 
-        val hasSuffix = hasThumbnailSuffix(url)
+        val hasSuffix = hasThumbnailSuffix(url, id)
 
         assertFalse(hasSuffix)
     }

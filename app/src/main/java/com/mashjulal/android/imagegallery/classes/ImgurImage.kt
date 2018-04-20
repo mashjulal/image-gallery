@@ -16,7 +16,7 @@ data class ImgurImage(
         @SerializedName("height") val height: Int
 ) : Parcelable {
     val link: String
-        get() = if (hasThumbnailSuffix(_link)) removeThumbnailSuffix(_link) else _link
+        get() = if (hasThumbnailSuffix(_link, id)) removeThumbnailSuffix(_link) else _link
     val title: String
         get() = _title ?: ""
 

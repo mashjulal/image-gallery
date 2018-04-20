@@ -39,7 +39,7 @@ class ImgurImageRecyclerViewAdapter(
 
         val width = getScreenWidthInPixels()
         val imageWidth = if(oneImage) width else width / 2
-        val imageLink = getImageThumbnailLink(image.link, ImageThumbnail.BIG_SQUARE)
+        val imageLink = getImageThumbnailLink(image.link, ImageThumbnail.MEDIUM)
 
         GlideApp.with(context)
                 .load(imageLink)
