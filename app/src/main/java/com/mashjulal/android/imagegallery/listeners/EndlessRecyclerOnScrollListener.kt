@@ -29,11 +29,10 @@ abstract class EndlessRecyclerOnScrollListener(
             }
         }
         if (!loading && totalItemCount - visibleItemCount <= firstVisibleItem + visibleThreshold) {
-            currentPage++
-
-            onLoadMore(currentPage)
-
-            loading = true
+            if (onLoadMore(currentPage)) {
+                currentPage++
+                loading = true
+            }
         }
     }
 
@@ -42,7 +41,7 @@ abstract class EndlessRecyclerOnScrollListener(
         currentPage = 0
     }
 
-    abstract fun onLoadMore(currentPage: Int)
+    abstract fun onLoadMore(currentPage: Int): Boolean
 
     companion object {
         var TAG = EndlessRecyclerOnScrollListener::class.java.simpleName

@@ -13,16 +13,16 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
+        android:focusable="true"
         android:onClick="scrollToTop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_up"
-        android:focusable="true" />
+        app:srcCompat="@drawable/ic_up"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_galleries"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_gallery"
-        />
+        tools:listitem="@layout/item_gallery"/>
+
 </android.support.constraint.ConstraintLayout>
