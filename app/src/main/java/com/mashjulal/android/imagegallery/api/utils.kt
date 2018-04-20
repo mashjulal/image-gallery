@@ -20,16 +20,19 @@ fun getImageThumbnailLink(imageLink: String, thumbnail: ImageThumbnail): String 
     return "%s%s.%s".format(pathWithoutExt, thumbnail.s, ext)
 }
 
-fun hasThumbnailSuffix(imageId: String, imageLink: String): Boolean {
-    val imageIdFromUrl = imageLink.substringAfterLast("/").substringBeforeLast(".")
-    return imageId != imageIdFromUrl
+fun hasThumbnailSuffix(imageLink: String): Boolean {
+    val fileName = imageLink.substringAfterLast("/")
+    val imageIdWithSuffix = fileName.substringBeforeLast(".")
+    val hasSuffix = ImageThumbnail.values().any { imageIdWithSuffix.last().toString() == it.s }
+    return hasSuffix
 }
 
 fun removeThumbnailSuffix(imageLink: String): String {
     val fileName = imageLink.substringAfterLast("/")
     val imageIdWithSuffix = fileName.substringBeforeLast(".")
-    val imageId = imageIdWithSuffix.substring(0, imageIdWithSuffix.length-1)
-
+    val imageId =
+            if (hasThumbnailSuffix(imageLink)) imageIdWithSuffix.substring(0, imageIdWithSuffix.length-1)
+            else imageIdWithSuffix
     val path = imageLink.substringBeforeLast("/")
     val ext = fileName.substringAfterLast(".")
     return "%s/%s.%s".format(path, imageId, ext)
