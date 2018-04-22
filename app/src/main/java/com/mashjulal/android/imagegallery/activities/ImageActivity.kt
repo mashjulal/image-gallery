@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.Window
-import com.mashjulal.android.imagegallery.fragments.ImgurImageFragment
 import com.mashjulal.android.imagegallery.R
 import com.mashjulal.android.imagegallery.classes.ImgurGallery
+import com.mashjulal.android.imagegallery.download
+import com.mashjulal.android.imagegallery.fragments.ImgurImageFragment
+import com.mashjulal.android.imagegallery.openInBrowser
 import kotlinx.android.synthetic.main.activity_image.*
 
 class ImageActivity : AppCompatActivity() {
@@ -35,6 +39,25 @@ class ImageActivity : AppCompatActivity() {
             override fun getCount(): Int = gallery.images.size
         }
         albumPager.setCurrentItem(selectedImagePosition, false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuInflater = menuInflater
+        menuInflater.inflate(R.menu.menu_activity_image, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item!!.itemId) {
+            R.id.item_open_in_browser -> {
+                openInBrowser(this, gallery.images[albumPager.currentItem].link); true
+            }
+            R.id.item_download -> {
+                download(this, gallery.images[albumPager.currentItem]); true
+            }
+            else ->
+                super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

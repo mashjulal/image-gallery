@@ -8,10 +8,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import com.mashjulal.android.imagegallery.R
 import com.mashjulal.android.imagegallery.classes.ImgurGallery
 import com.mashjulal.android.imagegallery.classes.ImgurImage
+import com.mashjulal.android.imagegallery.download
 import com.mashjulal.android.imagegallery.getNumberStringRepresentation
+import com.mashjulal.android.imagegallery.openInBrowser
 import kotlinx.android.synthetic.main.item_gallery.view.*
 import java.text.DateFormat
 import java.util.*
@@ -28,7 +31,6 @@ class ImgurGalleryRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(context).inflate(R.layout.item_gallery, parent, false)
-
         return ViewHolder(v)
     }
 
@@ -65,6 +67,28 @@ class ImgurGalleryRecyclerViewAdapter(
         holder.tvAccountUrl.text = gallery.accountUrl
         holder.tvDatetime.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
                 .format(gallery.datetime * 1000)
+        holder.ibOptions.setOnClickListener { v -> showPopupMenu(v, gallery) }
+    }
+
+    private fun showPopupMenu(view: View, gallery: ImgurGallery) {
+        val popupMenu = PopupMenu(context, view)
+        popupMenu.inflate(R.menu.menu_gallery_more)
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item!!.itemId) {
+                R.id.item_open_gallery_in_browser -> {
+                    openInBrowser(context, gallery.link)
+                    true
+                }
+                R.id.item_download_images -> {
+                    gallery.images.forEach { download(context, it) }
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+        popupMenu.show()
     }
 
     fun insert(galleries: List<ImgurGallery>) {
@@ -81,5 +105,6 @@ class ImgurGalleryRecyclerViewAdapter(
         val tvAccountUrl = itemView.tv_accountUrl!!
         val tvDatetime = itemView.tv_datetime!!
         val rvImages = itemView.rv_images!!
+        val ibOptions = itemView.ib_options!!
     }
 }

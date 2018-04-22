@@ -20,16 +20,6 @@ class ThumbnailTest {
     }
 
     @Test
-    fun testRemoveThumbnail_WithoutThumbnailSymbol() {
-        val url = "http://i.imgur.com/JmHLXXv.gif"
-
-        val expectedUrl = "http://i.imgur.com/JmHLXXv.gif"
-        val actualUrl = removeThumbnailSuffix(url)
-
-        assertEquals(expectedUrl, actualUrl)
-    }
-
-    @Test
     fun testHasThumbnail_True() {
         val url = "http://i.imgur.com/JmHLXXvh.gif"
         val id = "JmHLXXv"
