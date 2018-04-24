@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -38,6 +39,11 @@ class ImgurImageFragment : Fragment() {
                 .listener(object: RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                         v.loading.visibility = View.GONE
+                        Toast.makeText(
+                                context,
+                                "Can't get image from Imgur. Please try later.",
+                                Toast.LENGTH_LONG)
+                                .show()
                         return false
                     }
 

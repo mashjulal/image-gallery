@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -61,6 +62,8 @@ class ImgurImageRecyclerViewAdapter(
                 .error(android.R.drawable.stat_notify_error)
                 .centerCrop()
                 .override(imageWidth, imageWidth)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder!!.image)
 
         holder.image.setOnClickListener { onImageClick!!.onClick(gallery, position) }

@@ -17,11 +17,10 @@ import com.mashjulal.android.imagegallery.getNumberStringRepresentation
 import com.mashjulal.android.imagegallery.openInBrowser
 import kotlinx.android.synthetic.main.item_gallery.view.*
 import java.text.DateFormat
-import java.util.*
 
 class ImgurGalleryRecyclerViewAdapter(
         private val context: Context,
-        private var galleries : List<ImgurGallery> = ArrayList(),
+        private var galleries : MutableList<ImgurGallery> = mutableListOf(),
         private val onImageClickListener: ImgurImageRecyclerViewAdapter.OnImageClickListener
 ) : RecyclerView.Adapter<ImgurGalleryRecyclerViewAdapter.ViewHolder>() {
 
@@ -91,10 +90,23 @@ class ImgurGalleryRecyclerViewAdapter(
         popupMenu.show()
     }
 
+    fun getGalleries() = galleries
+
     fun insert(galleries: List<ImgurGallery>) {
         val galSizeBeforeInsertion = this.galleries.size
-        this.galleries += galleries
-        Handler().post({ notifyItemRangeInserted(galSizeBeforeInsertion, this.galleries.size) })
+        this.galleries.plusAssign(galleries)
+        Handler().post({
+            if (galSizeBeforeInsertion == 0) {
+                notifyDataSetChanged()
+            } else {
+                notifyItemRangeInserted(galSizeBeforeInsertion, this.galleries.size)
+            }
+        })
+    }
+
+    fun clear() {
+        galleries.clear()
+        notifyDataSetChanged()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

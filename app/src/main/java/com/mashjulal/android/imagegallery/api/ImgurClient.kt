@@ -1,6 +1,7 @@
 package com.mashjulal.android.imagegallery.api
 
 import com.mashjulal.android.imagegallery.ImageGalleryApplication
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -35,6 +36,7 @@ object ImgurClient {
         val builder = OkHttpClient.Builder()
                 .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(OAuthInterceptor(CLIENT_ID))
+                .cache(Cache(ImageGalleryApplication.instance.cacheDir, 10 * 1024 * 1024))
         return builder.build()
     }
 }

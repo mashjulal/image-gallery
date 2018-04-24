@@ -10,7 +10,7 @@ abstract class EndlessRecyclerOnScrollListener(
 
     private var previousTotal = 0
     private var loading = true
-    private val visibleThreshold = 20
+    private val visibleThreshold = 5
     private var firstVisibleItem: Int = 0
     private var visibleItemCount: Int = 0
     private var totalItemCount: Int = 0

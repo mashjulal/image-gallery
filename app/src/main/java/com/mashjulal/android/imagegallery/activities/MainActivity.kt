@@ -1,8 +1,6 @@
 package com.mashjulal.android.imagegallery.activities
 
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
+import com.mashjulal.android.imagegallery.ImageGalleryApplication
 import com.mashjulal.android.imagegallery.R
 import com.mashjulal.android.imagegallery.adapters.ImgurGalleryRecyclerViewAdapter
 import com.mashjulal.android.imagegallery.adapters.ImgurImageRecyclerViewAdapter
@@ -20,6 +19,8 @@ import com.mashjulal.android.imagegallery.listeners.EndlessRecyclerOnScrollListe
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var endlessRecyclerOnScrollListener: EndlessRecyclerOnScrollListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +34,25 @@ class MainActivity : AppCompatActivity() {
         })
         val layoutManager = LinearLayoutManager(this)
         rv_galleries.layoutManager = layoutManager
-        rv_galleries.addOnScrollListener(object: EndlessRecyclerOnScrollListener(layoutManager, 1) {
+
+        endlessRecyclerOnScrollListener = object: EndlessRecyclerOnScrollListener(layoutManager, 1) {
             override fun onLoadMore(currentPage: Int): Boolean {
                 return populateGalleryList(currentPage)
             }
-        })
+        }
+        rv_galleries.addOnScrollListener(endlessRecyclerOnScrollListener)
         rv_galleries.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 fab_toTop.visibility = if (dy > 0) View.VISIBLE else View.GONE
             }
         })
-        populateGalleryList(0)
+
+        swipeRefreshLayout.setOnRefreshListener {
+            refreshList()
+        }
+
+        refreshList()
     }
 
     fun scrollToTop(v: View) {
@@ -59,19 +67,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun populateGalleryList(currentPage: Int): Boolean {
-        if (!isConnectedToInternet()) {
-            Toast.makeText(this, R.string.message_no_internet, Toast.LENGTH_LONG).show()
-            return false
+        if (ImageGalleryApplication.instance.isConnectedToInternet()) {
+            (rv_galleries.adapter as ImgurGalleryRecyclerViewAdapter)
+                    .insert(HotAsyncTask().execute(currentPage).get())
+            return true
         }
-        (rv_galleries.adapter as ImgurGalleryRecyclerViewAdapter)
-                .insert(HotAsyncTask().execute(currentPage).get())
-        return true
+        return false
     }
 
-    private fun isConnectedToInternet(): Boolean {
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = cm.activeNetworkInfo
-        return netInfo != null && netInfo.isConnectedOrConnecting
+    private fun refreshList() {
+        val adapter = rv_galleries.adapter as ImgurGalleryRecyclerViewAdapter
+        adapter.clear()
+        rv_galleries.scrollToPosition(0)
+        endlessRecyclerOnScrollListener.reset()
+        if (ImageGalleryApplication.instance.isConnectedToInternet()) {
+            populateGalleryList(0)
+        } else {
+            adapter.insert(ImageGalleryApplication.instance.getLastGalleriesFromPreferences())
+            Toast.makeText(this, R.string.message_no_internet, Toast.LENGTH_LONG).show()
+        }
+        swipeRefreshLayout.isRefreshing = false
+        cacheGalleries()
+    }
+
+    private fun cacheGalleries() {
+        val galleries = (rv_galleries.adapter as ImgurGalleryRecyclerViewAdapter).getGalleries()
+        val first10Galleries = galleries.subList(0, Math.min(galleries.size, 10))
+        ImageGalleryApplication.instance.saveGalleriesFromPreferences(first10Galleries)
     }
 
     companion object {
