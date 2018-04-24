@@ -28,14 +28,14 @@ class ImgurImageRecyclerViewAdapter(
 
     private var onImageClick: OnImageClickListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(context).inflate(R.layout.item_image, parent, false)
         return ViewHolder(v)
     }
 
     override fun getItemCount(): Int = gallery.images.size
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val image = gallery.images[position]
 
         val width = getScreenWidthInPixels()
@@ -48,14 +48,14 @@ class ImgurImageRecyclerViewAdapter(
                     override fun onLoadFailed(e: GlideException?, model: Any?,
                                               target: Target<Drawable>?,
                                               isFirstResource: Boolean): Boolean {
-                        holder!!.loading.visibility = View.GONE
+                        holder.loading.visibility = View.GONE
                         return false
                     }
 
                     override fun onResourceReady(resource: Drawable?, model: Any?,
                                                  target: Target<Drawable>?, dataSource: DataSource?,
                                                  isFirstResource: Boolean): Boolean {
-                        holder!!.loading.visibility = View.GONE
+                        holder.loading.visibility = View.GONE
                         return false
                     }
                 })
@@ -64,7 +64,7 @@ class ImgurImageRecyclerViewAdapter(
                 .override(imageWidth, imageWidth)
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder!!.image)
+                .into(holder.image)
 
         holder.image.setOnClickListener { onImageClick!!.onClick(gallery, position) }
 

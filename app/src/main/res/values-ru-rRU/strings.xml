@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Image Gallery</string>
+    <string name="image">Изображение</string>
+    <string name="message_no_internet">Отсутствует интернет-соединение.</string>
+    <string name="open_in_browser">Открыть в браузере</string>
+    <string name="download">Сохранить</string>
+    <string name="more">Ещё</string>
+    <string name="menu_refresh">Обновить</string>
+</resources>

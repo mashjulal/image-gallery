@@ -28,16 +28,16 @@ class ImgurGalleryRecyclerViewAdapter(
         private const val IMAGES_SPAN_COUNT = 2
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(context).inflate(R.layout.item_gallery, parent, false)
         return ViewHolder(v)
     }
 
     override fun getItemCount() = galleries.size
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var gallery = galleries[position]
-        val layoutManager: LinearLayoutManager
+        val layoutManager: RecyclerView.LayoutManager
         var oneImage = false
         if (gallery.images.size > 1) {
             layoutManager = GridLayoutManager(context, IMAGES_SPAN_COUNT)
@@ -55,7 +55,7 @@ class ImgurGalleryRecyclerViewAdapter(
         }
         val adapter = ImgurImageRecyclerViewAdapter(context, gallery, oneImage)
         adapter.setOnImageClickListener(onImageClickListener)
-        holder!!.rvImages.layoutManager = layoutManager
+        holder.rvImages.layoutManager = layoutManager
         holder.rvImages.adapter = adapter
         holder.tvTitle.text = gallery.title
         holder.tvViews.text = getNumberStringRepresentation(gallery.views)
