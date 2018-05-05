@@ -4,7 +4,11 @@ import android.content.Context
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.MotionEvent
+import com.github.chrisbanes.photoview.PhotoView
 
+/**
+ * Subclass of [ViewPager] for items with [PhotoView].
+ */
 class ViewPagerFixed : ViewPager {
 
     constructor(context: Context) : super(context)

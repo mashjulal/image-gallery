@@ -104,8 +104,10 @@ class ImageActivity : AppCompatActivity() {
 
     private fun setupLayout(selectedImagePosition: Int) {
         albumPager.adapter = object: FragmentPagerAdapter(supportFragmentManager) {
-            override fun getItem(position: Int): Fragment =
-                    ImgurImageFragment.newInstance(gallery.images[position].link)
+            override fun getItem(position: Int): Fragment {
+                val image = gallery.images[position]
+                return ImgurImageFragment.newInstance(image.link, image.type)
+            }
 
             override fun getCount(): Int = gallery.images.size
         }

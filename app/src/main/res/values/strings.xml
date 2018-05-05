@@ -10,4 +10,9 @@
     <string name="message_permission_write_external_storage_denied">Permission denied to write to your external storage.</string>
     <string name="message_permission_write_external_storage_granted">
         Permission to write to your external storage was granted. Please retry your download.</string>
+    <string name="extension_gif" translatable="false">.GIF</string>
+    <string name="extension_mp4" translatable="false">.MP4</string>
+    <string name="message_no_video_support">
+        Application doesn\'t support video playing.\n
+        &lt;a href=\"%1$s\"&gt;Open in browser&lt;/a&gt;</string>
 </resources>

@@ -14,7 +14,7 @@ import com.bumptech.glide.request.target.Target
 import com.mashjulal.android.imagegallery.GlideApp
 import com.mashjulal.android.imagegallery.R
 import com.mashjulal.android.imagegallery.api.ImageThumbnail
-import com.mashjulal.android.imagegallery.api.ImageType
+import com.mashjulal.android.imagegallery.api.MediaType
 import com.mashjulal.android.imagegallery.api.getImageThumbnailLink
 import com.mashjulal.android.imagegallery.classes.ImgurGallery
 import com.mashjulal.android.imagegallery.classes.ImgurImage
@@ -53,7 +53,7 @@ class ImgurImageRecyclerViewAdapter(
      */
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val ivContent = itemView.iv_image!!
-        private val gif = itemView.tv_gif!!
+        private val mediaType = itemView.tv_type!!
         private val loading = itemView.loading!!
 
         fun bind(image: ImgurImage, position: Int, context: Context) {
@@ -86,7 +86,23 @@ class ImgurImageRecyclerViewAdapter(
                     .into(ivContent)
 
             ivContent.setOnClickListener { onImageClick!!.onClick(gallery, position) }
-            gif.visibility = if (image.type == ImageType.GIF.value) View.VISIBLE else View.GONE
+
+            when (image.type) {
+                MediaType.JPEG.value -> {
+                    mediaType.visibility = View.GONE
+                }
+                MediaType.GIF.value -> {
+                    mediaType.visibility = View.VISIBLE
+                    mediaType.text = context.getText(R.string.extension_gif)
+                }
+                MediaType.MP4.value -> {
+                    mediaType.visibility = View.VISIBLE
+                    mediaType.text = context.getText(R.string.extension_mp4)
+                }
+                else -> {
+                    mediaType.visibility = View.GONE
+                }
+            }
         }
     }
 

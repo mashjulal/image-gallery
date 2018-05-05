@@ -13,11 +13,12 @@ enum class ImageThumbnail(val s: String) {
 }
 
 /**
- *  Image MIME type enumeration.
+ *  Media MIME type enumeration from Imgur.
  */
-enum class ImageType(val value: String) {
+enum class MediaType(val value: String) {
     JPEG("image/jpeg"),
-    GIF("image/gif")
+    GIF("image/gif"),
+    MP4("video/mp4")
 }
 
 /**
