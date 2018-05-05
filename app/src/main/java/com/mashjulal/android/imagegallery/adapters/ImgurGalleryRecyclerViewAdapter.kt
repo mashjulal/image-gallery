@@ -1,5 +1,6 @@
 package com.mashjulal.android.imagegallery.adapters
 
+import android.Manifest
 import android.content.Context
 import android.os.Handler
 import android.support.v7.widget.GridLayoutManager
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import com.mashjulal.android.imagegallery.*
+import com.mashjulal.android.imagegallery.activities.MainActivity
 import com.mashjulal.android.imagegallery.classes.ImgurGallery
 import com.mashjulal.android.imagegallery.classes.ImgurImage
 import kotlinx.android.synthetic.main.item_gallery.view.*
@@ -116,8 +118,19 @@ class ImgurGalleryRecyclerViewAdapter(
                         true
                     }
                     R.id.item_download_images -> {
-                        gallery.images.forEach { download(context, it) }
-                        true
+                        if (isExternalStorageWritable()
+                                and hasPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        ) {
+                            gallery.images.forEach { download(context, it) }
+                            true
+                        } else {
+                            requestPermission(
+                                    context as MainActivity,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    MainActivity.PERMISSION_WRITE_EXT_STORAGE
+                            )
+                            false
+                        }
                     }
                     else -> {
                         false

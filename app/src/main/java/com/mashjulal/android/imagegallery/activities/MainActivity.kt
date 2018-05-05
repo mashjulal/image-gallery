@@ -1,6 +1,7 @@
 package com.mashjulal.android.imagegallery.activities
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -23,6 +24,25 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+
+        private var hasMoreImages = true
+        const val PERMISSION_WRITE_EXT_STORAGE = 1
+
+        class HotAsyncTask : AsyncTask<Int, Void, List<ImgurGallery>>() {
+
+            override fun doInBackground(vararg p0: Int?): List<ImgurGallery> {
+                val page = if (p0.isNotEmpty()) p0[0]!! else 0
+                val response = ImgurClient.getService().getHotGallery(page).execute()
+                val responseBody = response.body() ?: ImgurResponse(listOf(), response.isSuccessful, response.code())
+                if (responseBody.data.isEmpty()) {
+                    hasMoreImages = false
+                }
+                return responseBody.data
+            }
+        }
+    }
+
     private lateinit var endlessRecyclerOnScrollListener: EndlessRecyclerOnScrollListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +51,22 @@ class MainActivity : AppCompatActivity() {
 
         setupLayout()
         refreshList()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMISSION_WRITE_EXT_STORAGE -> {
+                val permissionGranted =
+                        grantResults.isNotEmpty()
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                val messageId =
+                        if (permissionGranted) R.string.message_permission_write_external_storage_granted
+                        else R.string.message_permission_write_external_storage_denied
+                Toast.makeText(this, messageId, Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
     }
 
     fun scrollToTop(v: View) {
@@ -46,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         rv_galleries.adapter = ImgurGalleryRecyclerViewAdapter(
-                context = applicationContext,
+                context = this,
                 onImageClickListener = object: ImgurImageRecyclerViewAdapter.OnImageClickListener {
                     override fun onClick(gallery: ImgurGallery, selectedImagePosition: Int) {
                         openImage(gallery, selectedImagePosition)
@@ -113,23 +149,5 @@ class MainActivity : AppCompatActivity() {
         val galleries = (rv_galleries.adapter as ImgurGalleryRecyclerViewAdapter).getGalleries()
         val first10Galleries = galleries.subList(0, Math.min(galleries.size, 10))
         ImageGalleryApplication.instance.saveGalleriesToPreferences(first10Galleries)
-    }
-
-    companion object {
-
-        private var hasMoreImages = true
-
-        class HotAsyncTask : AsyncTask<Int, Void, List<ImgurGallery>>() {
-
-            override fun doInBackground(vararg p0: Int?): List<ImgurGallery> {
-                val page = if (p0.isNotEmpty()) p0[0]!! else 0
-                val response = ImgurClient.getService().getHotGallery(page).execute()
-                val responseBody = response.body() ?: ImgurResponse(listOf(), response.isSuccessful, response.code())
-                if (responseBody.data.isEmpty()) {
-                    hasMoreImages = false
-                }
-                return responseBody.data
-            }
-        }
     }
 }

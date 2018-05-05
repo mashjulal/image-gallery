@@ -1,11 +1,15 @@
 package com.mashjulal.android.imagegallery
 
+import android.app.Activity
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
 import android.os.Environment
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
 import com.mashjulal.android.imagegallery.classes.ImgurImage
@@ -75,6 +79,33 @@ fun download(context: Context, image: ImgurImage) {
             .setAllowedOverRoaming(true)
     request.allowScanningByMediaScanner()
     downloadManager.enqueue(request)
+}
+
+/**
+ * Checks if external storage is available for writing.
+ * @return is external storage writable
+ */
+fun isExternalStorageWritable(): Boolean {
+    return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+}
+
+/**
+ * Checks if application has specified permission.
+ * @param context application context
+ * @param permission permission string
+ * @return application has permission or not
+ */
+fun hasPermission(context: Context, permission: String) =
+        ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+
+/**
+ * Requests specified permission.
+ * @param activity activity for what permission is requesting
+ * @param permission permission string
+ * @param requestCode permission request code
+ */
+fun requestPermission(activity: Activity, permission: String, requestCode: Int) {
+    ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
 }
 
 @GlideModule

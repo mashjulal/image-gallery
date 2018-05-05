@@ -7,4 +7,7 @@
     <string name="more">More</string>
     <string name="menu_refresh">Refresh</string>
     <string name="message_imgur_error">Can\'t get image from Imgur. Please try later.</string>
+    <string name="message_permission_write_external_storage_denied">Permission denied to write to your external storage.</string>
+    <string name="message_permission_write_external_storage_granted">
+        Permission to write to your external storage was granted. Please retry your download.</string>
 </resources>

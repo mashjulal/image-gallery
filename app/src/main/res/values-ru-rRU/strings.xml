@@ -8,4 +8,6 @@
     <string name="more">Ещё</string>
     <string name="menu_refresh">Обновить</string>
     <string name="message_imgur_error">Не получается загрузить изображение с Imgur. Попробуйте позже.</string>
+    <string name="message_permission_write_external_storage_granted">Разрешение на запись на внешнюю память получено. Повторите загрузку, пожайлуста.</string>
+    <string name="message_permission_write_external_storage_denied">Разрешение на запись на внешнюю память не получено.</string>
 </resources>
