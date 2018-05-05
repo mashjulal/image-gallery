@@ -7,6 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 
+/**
+ * Interface for Imgur API methods.
+ */
 interface ImgurService {
 
     @GET("gallery/hot/{page}")

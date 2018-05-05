@@ -18,6 +18,9 @@ import com.mashjulal.android.imagegallery.classes.ImgurResponse
 import com.mashjulal.android.imagegallery.listeners.EndlessRecyclerOnScrollListener
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * Class for activities of application main screen
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var endlessRecyclerOnScrollListener: EndlessRecyclerOnScrollListener
@@ -26,37 +29,49 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        rv_galleries.adapter = ImgurGalleryRecyclerViewAdapter(applicationContext, ArrayList(),
-                object: ImgurImageRecyclerViewAdapter.OnImageClickListener {
-            override fun onClick(gallery: ImgurGallery, selectedImagePosition: Int) {
-                openImage(gallery, selectedImagePosition)
-            }
-        })
-        val layoutManager = LinearLayoutManager(this)
-        rv_galleries.layoutManager = layoutManager
-
-        endlessRecyclerOnScrollListener = object: EndlessRecyclerOnScrollListener(layoutManager, 1) {
-            override fun onLoadMore(currentPage: Int): Boolean {
-                return populateGalleryList(currentPage)
-            }
-        }
-        rv_galleries.addOnScrollListener(endlessRecyclerOnScrollListener)
-        rv_galleries.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                fab_toTop.visibility = if (dy > 0) View.VISIBLE else View.GONE
-            }
-        })
-
-        swipeRefreshLayout.setOnRefreshListener {
-            refreshList()
-        }
-
+        setupLayout()
         refreshList()
     }
 
     fun scrollToTop(v: View) {
         rv_galleries.smoothScrollToPosition(0)
+    }
+
+    private fun setupLayout() {
+        setupRecyclerView()
+        swipeRefreshLayout.setOnRefreshListener {
+            refreshList()
+        }
+    }
+
+    private fun setupRecyclerView() {
+        rv_galleries.adapter = ImgurGalleryRecyclerViewAdapter(
+                context = applicationContext,
+                onImageClickListener = object: ImgurImageRecyclerViewAdapter.OnImageClickListener {
+                    override fun onClick(gallery: ImgurGallery, selectedImagePosition: Int) {
+                        openImage(gallery, selectedImagePosition)
+                    }
+                })
+
+        val layoutManager = LinearLayoutManager(this)
+        rv_galleries.layoutManager = layoutManager
+
+        endlessRecyclerOnScrollListener =
+                object: EndlessRecyclerOnScrollListener(layoutManager, 1) {
+                    override fun onLoadMore(currentPage: Int): Boolean {
+                        return populateGalleryList(currentPage)
+                    }
+                }
+        rv_galleries.addOnScrollListener(endlessRecyclerOnScrollListener)
+
+        rv_galleries.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val directionDown = dy > 0
+                fab_toTop.visibility = if (directionDown) View.VISIBLE else View.GONE
+            }
+        })
     }
 
     private fun openImage(gallery: ImgurGallery, selectedImagePosition: Int) {
@@ -77,9 +92,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun refreshList() {
         val adapter = rv_galleries.adapter as ImgurGalleryRecyclerViewAdapter
-        adapter.clear()
-        rv_galleries.scrollToPosition(0)
-        endlessRecyclerOnScrollListener.reset()
+        clearList(adapter)
         if (ImageGalleryApplication.instance.isConnectedToInternet()) {
             populateGalleryList(0)
         } else {
@@ -90,10 +103,16 @@ class MainActivity : AppCompatActivity() {
         cacheGalleries()
     }
 
+    private fun clearList(adapter: ImgurGalleryRecyclerViewAdapter) {
+        adapter.clear()
+        rv_galleries.scrollToPosition(0)
+        endlessRecyclerOnScrollListener.reset()
+    }
+
     private fun cacheGalleries() {
         val galleries = (rv_galleries.adapter as ImgurGalleryRecyclerViewAdapter).getGalleries()
         val first10Galleries = galleries.subList(0, Math.min(galleries.size, 10))
-        ImageGalleryApplication.instance.saveGalleriesFromPreferences(first10Galleries)
+        ImageGalleryApplication.instance.saveGalleriesToPreferences(first10Galleries)
     }
 
     companion object {

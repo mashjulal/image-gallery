@@ -18,7 +18,11 @@ import com.mashjulal.android.imagegallery.R
 import kotlinx.android.synthetic.main.fragment_imgur_image.view.*
 
 
+/**
+ * Subclass of [Fragment] for displaying fullscreen image.
+ */
 class ImgurImageFragment : Fragment() {
+
     private lateinit var imageLink: String
     private lateinit var photoAttacher: PhotoViewAttacher
 
@@ -41,7 +45,7 @@ class ImgurImageFragment : Fragment() {
                         v.loading.visibility = View.GONE
                         Toast.makeText(
                                 context,
-                                "Can't get image from Imgur. Please try later.",
+                                R.string.message_imgur_error,
                                 Toast.LENGTH_LONG)
                                 .show()
                         return false
@@ -55,7 +59,6 @@ class ImgurImageFragment : Fragment() {
                 .into(v.image)
 
         photoAttacher = PhotoViewAttacher(v.image)
-
         return v
     }
 

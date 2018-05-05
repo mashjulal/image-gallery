@@ -4,6 +4,9 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Parcelable POJO class of Imgur gallery item.
+ */
 data class ImgurGallery(
         @SerializedName("id")val id: String,
         @SerializedName("title") val title: String,
@@ -45,8 +48,7 @@ data class ImgurGallery(
             parcel.readValue(Int::class.java.classLoader) as? Int,
             parcel.readValue(Int::class.java.classLoader) as? Int,
             parcel.readString(),
-            parcel.readValue(Boolean::class.java.classLoader) as? Boolean) {
-    }
+            parcel.readValue(Boolean::class.java.classLoader) as? Boolean)
 
     constructor(id: String, title: String, points: Int, views: Int,
                 commentCount: Int, accountUrl: String, datetime: Long, images: List<ImgurImage>?)

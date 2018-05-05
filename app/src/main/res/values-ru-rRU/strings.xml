@@ -7,4 +7,5 @@
     <string name="download">Сохранить</string>
     <string name="more">Ещё</string>
     <string name="menu_refresh">Обновить</string>
+    <string name="message_imgur_error">Не получается загрузить изображение с Imgur. Попробуйте позже.</string>
 </resources>

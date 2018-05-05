@@ -3,6 +3,9 @@ package com.mashjulal.android.imagegallery.listeners
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 
+/**
+ *
+ */
 abstract class EndlessRecyclerOnScrollListener(
         private val mLinearLayoutManager: LinearLayoutManager,
         private var currentPage: Int

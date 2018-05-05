@@ -6,4 +6,5 @@
     <string name="download">Download</string>
     <string name="more">More</string>
     <string name="menu_refresh">Refresh</string>
+    <string name="message_imgur_error">Can\'t get image from Imgur. Please try later.</string>
 </resources>

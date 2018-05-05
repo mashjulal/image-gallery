@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName
 import com.mashjulal.android.imagegallery.api.hasThumbnailSuffix
 import com.mashjulal.android.imagegallery.api.removeThumbnailSuffix
 
+/**
+ * Parcelable POJO class of Imgur image item.
+ */
 data class ImgurImage(
         @SerializedName("id") val id: String,
         @SerializedName("title") private val _title: String?,

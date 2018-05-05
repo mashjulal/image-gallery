@@ -8,12 +8,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
+/**
+ * [Retrofit] singleton client of www.imgur.com.
+ */
 object ImgurClient {
 
     private const val API_URL = "https://api.imgur.com/3/"
     private val CLIENT_ID = ImageGalleryApplication.instance.getSecretClientId()
     private const val TIMEOUT: Long = 20
-
+    private const val CACHE_SIZE: Long = 10 * 1024 * 1024 // 10 Mb
 
     private lateinit var service: ImgurService
     private lateinit var restAdapter: Retrofit
@@ -36,7 +39,7 @@ object ImgurClient {
         val builder = OkHttpClient.Builder()
                 .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(OAuthInterceptor(CLIENT_ID))
-                .cache(Cache(ImageGalleryApplication.instance.cacheDir, 10 * 1024 * 1024))
+                .cache(Cache(ImageGalleryApplication.instance.cacheDir, CACHE_SIZE))
         return builder.build()
     }
 }
