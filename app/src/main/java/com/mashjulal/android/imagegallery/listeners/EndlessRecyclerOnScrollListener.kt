@@ -45,8 +45,4 @@ abstract class EndlessRecyclerOnScrollListener(
     }
 
     abstract fun onLoadMore(currentPage: Int): Boolean
-
-    companion object {
-        var TAG = EndlessRecyclerOnScrollListener::class.java.simpleName
-    }
 }

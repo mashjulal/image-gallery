@@ -28,8 +28,7 @@ data class ImgurGallery(
             parcel.readString(),
             parcel.readLong(),
             parcel.readString(),
-            parcel.createTypedArrayList(ImgurImage.CREATOR)) {
-    }
+            parcel.createTypedArrayList(ImgurImage.CREATOR))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)

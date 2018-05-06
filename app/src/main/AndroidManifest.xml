@@ -16,15 +16,18 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            >
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ImageActivity"/>
+        <activity android:name=".activities.ImageActivity" />
+
+        <service
+            android:name=".services.ImgurGalleryService"
+            android:enabled="true" />
     </application>
 
 </manifest>

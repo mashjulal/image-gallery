@@ -41,8 +41,6 @@ class ImgurGalleryRecyclerViewAdapter(
         holder.bind(gallery, context, onImageClickListener)
     }
 
-    fun getGalleries() = galleries
-
     fun insert(galleries: List<ImgurGallery>) {
         val galSizeBeforeInsertion = this.galleries.size
         this.galleries.plusAssign(galleries)
@@ -80,11 +78,9 @@ class ImgurGalleryRecyclerViewAdapter(
         ) {
             val layoutManager: RecyclerView.LayoutManager
             val oneImage = gallery.images.size == 1
-            if (!oneImage) {
-                layoutManager = GridLayoutManager(context, IMAGES_SPAN_COUNT)
-            } else {
-                layoutManager = LinearLayoutManager(context)
-            }
+            layoutManager =
+                    if (!oneImage) GridLayoutManager(context, IMAGES_SPAN_COUNT)
+                    else LinearLayoutManager(context)
             val adapter = ImgurImageRecyclerViewAdapter(context, gallery, oneImage)
             adapter.setOnImageClickListener(onImageClickListener)
             rvImages.layoutManager = layoutManager
