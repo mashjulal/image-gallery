@@ -13,5 +13,5 @@ import retrofit2.http.Path
 interface ImgurService {
 
     @GET("gallery/hot/{page}")
-    fun getHotGallery(@Path("page") page: Int = 0): Call<ImgurResponse<ImgurGallery>>
+    fun getHotGallery(@Path("page") page: Int = 0): Call<ImgurResponse<List<ImgurGallery>>>
 }

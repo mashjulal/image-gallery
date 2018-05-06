@@ -41,7 +41,7 @@ abstract class EndlessRecyclerOnScrollListener(
 
     internal fun reset() {
         previousTotal = 0
-        currentPage = 0
+        currentPage = 1
     }
 
     abstract fun onLoadMore(currentPage: Int): Boolean

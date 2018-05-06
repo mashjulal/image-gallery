@@ -1,6 +1,9 @@
 package com.mashjulal.android.imagegallery.api
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.mashjulal.android.imagegallery.ImageGalleryApplication
+import com.mashjulal.android.imagegallery.classes.ImgurGallery
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -26,7 +29,7 @@ object ImgurClient {
             restAdapter = Retrofit.Builder()
                     .baseUrl(API_URL)
                     .client(getClient())
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(getGson()))
                     .build()
 
             service = restAdapter.create(ImgurService::class.java)
@@ -42,4 +45,8 @@ object ImgurClient {
                 .cache(Cache(ImageGalleryApplication.instance.cacheDir, CACHE_SIZE))
         return builder.build()
     }
+
+    private fun getGson(): Gson = GsonBuilder()
+                .registerTypeAdapter(ImgurGallery::class.java, ImgurGalleryDeserializer())
+                .create()
 }
