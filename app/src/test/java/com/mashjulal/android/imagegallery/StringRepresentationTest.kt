@@ -3,6 +3,8 @@ package com.mashjulal.android.imagegallery
 import org.junit.Assert
 import org.junit.Test
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.Instant
 import java.util.*
 
 class NumberStringRepresentationTest {
@@ -29,5 +31,28 @@ class NumberStringRepresentationTest {
         val actualRep = getNumberStringRepresentation(num)
 
         Assert.assertEquals(expectedRep, actualRep)
+    }
+}
+
+class DateStringRepresentationTest {
+
+    @Test
+    fun testDateStringRepresentation_now() {
+        val dateMillis = Instant.now().toEpochMilli()
+
+        val dateStringExpected = SimpleDateFormat("dd.MM.yy HH:mm").format(dateMillis)
+        val dateStringActual = getDateRepresentation(dateMillis)
+
+        Assert.assertEquals(dateStringExpected, dateStringActual)
+    }
+
+    @Test
+    fun testDateStringRepresentation_fixed() {
+        val millis = 1200000L
+
+        val dateStringExpected = "01.01.70 3:20"
+        val dateStringActual = getDateRepresentation(millis)
+
+        Assert.assertEquals(dateStringExpected, dateStringActual)
     }
 }
